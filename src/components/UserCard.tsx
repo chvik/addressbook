@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
 
-export function UserCard({ user }: { user: User }) {
+export const UserCard: React.FunctionComponent<{ user: User }> = ({ user }) => {
     return (
         <Container className="border" role="cell">
             <Row>
@@ -24,4 +24,4 @@ export function UserCard({ user }: { user: User }) {
             </Row>
         </Container>
     );
-}
+};

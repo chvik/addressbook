@@ -6,25 +6,11 @@ import * as actions from "./actions";
 export const addressBookReducer = (
     state: AddressBookState = initialState,
     action: Action
-) => {
-    if (isType(action, actions.exampleAsyncAction.async.started)) {
+): AddressBookState => {
+    if (isType(action, actions.usersFetched)) {
         return {
             ...state,
-            phase: "started",
-        };
-    }
-
-    if (isType(action, actions.exampleAsyncAction.async.done)) {
-        return {
-            ...state,
-            phase: "done",
-        };
-    }
-
-    if (isType(action, actions.moreUsers.async.done)) {
-        return {
-            ...state,
-            users: action.payload.result,
+            users: [...state.users, ...action.payload.users],
         };
     }
 

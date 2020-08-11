@@ -15,6 +15,7 @@ export async function fetchUsers(
     throw new Error(`HTTP error ${response.status} in retrieving ${url}`);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createUserFromApiData(data: any): User {
     return {
         first: data["name"]["first"],

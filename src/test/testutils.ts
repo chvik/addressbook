@@ -26,5 +26,5 @@ export function getRandomTestUser(): User {
 }
 
 export function getSomeRandomTestUsers(n: number): ReadonlyArray<User> {
-    return new Array(10).fill(null).map((_) => getRandomTestUser());
+    return new Array(n).fill(null).map(() => getRandomTestUser());
 }

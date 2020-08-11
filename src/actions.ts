@@ -1,22 +1,19 @@
 import actionCreatorFactory from "typescript-fsa";
 import { asyncFactory } from "typescript-fsa-redux-thunk";
 import { AddressBookState } from "./store";
-import { fetchUsers } from "./randomuserclient";
 import { User } from "./model";
+import { fetchMore } from "./userfetcher";
 
 const actionCreator = actionCreatorFactory();
 const asyncActionCreator = asyncFactory<AddressBookState>(actionCreator);
 
-export const exampleAsyncAction = asyncActionCreator<{}, number>(
-    "ExampleAsync",
-    async () => {
-        return Promise.resolve(123);
+export const moreUsers = asyncActionCreator<void, void>(
+    "MoreUsers",
+    async (params, dispatch, getState) => {
+        await fetchMore(dispatch, getState());
     }
 );
 
-export const moreUsers = asyncActionCreator<{}, ReadonlyArray<User>>(
-    "MoreUsers",
-    async () => {
-        return fetchUsers(1, 50);
-    }
-);
+export const usersFetched = actionCreator<{
+    users: ReadonlyArray<User>;
+}>("UsersFetched");

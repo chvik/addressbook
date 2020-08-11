@@ -7,14 +7,32 @@
     },
     "plugins": [
       "@typescript-eslint",
-      "prettier"
+      "prettier",
+      "react"
     ],
     "extends": [
-        "prettier"
+        "prettier",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended"
     ],
     "rules": {
         "prettier/prettier": [
             "error"
         ]
+    },
+    "overrides": [
+        {
+            "files": ["**/*.tsx"],
+            "rules": {
+                "react/prop-types": "off"
+            }
+        }
+    ],
+    "settings": {
+        "react": {
+            "version": "detect"
+          }
     }
 }

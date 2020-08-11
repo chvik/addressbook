@@ -9,7 +9,7 @@ import { UserCard } from "./UserCard";
 
 const N_COLS = 6;
 
-export function UserGrid() {
+export const UserGrid: React.FunctionComponent = () => {
     const users = useSelector<AddressBookState, ReadonlyArray<User>>(
         (state) => state.users
     );
@@ -27,13 +27,13 @@ export function UserGrid() {
             ))}
         </Container>
     );
-}
+};
 
 function sliceArray<T>(
     array: ReadonlyArray<T>,
     chunk: number
 ): Array<Array<T>> {
-    let slices: Array<Array<T>> = [];
+    const slices: Array<Array<T>> = [];
     for (let i = 0; i < array.length; i += chunk) {
         slices.push(array.slice(i, i + chunk));
     }
