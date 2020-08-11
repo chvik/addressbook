@@ -21,5 +21,12 @@ export const addressBookReducer = (
         };
     }
 
+    if (isType(action, actions.moreUsers.async.done)) {
+        return {
+            ...state,
+            users: action.payload.result,
+        };
+    }
+
     return state;
 };

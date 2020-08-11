@@ -1,25 +1,27 @@
 import React from "react";
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
 import { User } from "../model";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Image from "react-bootstrap/Image";
+import Container from "react-bootstrap/Container";
 
 export function UserCard({ user }: { user: User }) {
     return (
-        <Card role="cell" border="info">
-            <Card.Title className="m-2">
-                {user.first} {user.last}
-            </Card.Title>
-            <Card.Img variant="top" src={user.thumbnail} />
-            <Card.Body>
-                <ListGroup variant="flush">
-                    <ListGroup.Item>
-                        Username: <span>{user.username}</span>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        Email: <span>{user.email}</span>
-                    </ListGroup.Item>
-                </ListGroup>
-            </Card.Body>
-        </Card>
+        <Container className="border" role="cell">
+            <Row>
+                <Col className="align-self-center flex-grow-0">
+                    <Image src={user.thumbnail} rounded />
+                </Col>
+                <Col xs={6} sm={8} className="m-2">
+                    <Row>
+                        <strong>
+                            {user.first} {user.last}
+                        </strong>
+                    </Row>
+                    <Row className="text-muted">{user.username}</Row>
+                    <Row>{user.email}</Row>
+                </Col>
+            </Row>
+        </Container>
     );
 }

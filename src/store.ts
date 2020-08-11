@@ -11,7 +11,7 @@ export interface AddressBookState {
 
 export const initialState: AddressBookState = {
     phase: "not started",
-    users: getSomeRandomTestUsers(16),
+    users: [],
 };
 
 export const addressBookStore = createStore(
