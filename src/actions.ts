@@ -14,7 +14,9 @@ export const moreUsers = asyncActionCreator<void, void>(
     }
 );
 
-export const usersFetchedFromPrefetch = actionCreator<void>("UsersFetchedFromPrefetch");
+export const usersFetchedFromPrefetch = actionCreator<void>(
+    "UsersFetchedFromPrefetch"
+);
 
 export const usersPrefetched = actionCreator<{
     prefetchedUsers: ReadonlyArray<User>;

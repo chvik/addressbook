@@ -8,7 +8,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import * as actions from "../actions";
 import { AddressBookState } from "../model";
-import { User } from "../model";
 
 export const AddressBookPage: React.FunctionComponent = () => {
     const dispatch = useDispatch();
@@ -16,7 +15,13 @@ export const AddressBookPage: React.FunctionComponent = () => {
         dispatch(actions.moreUsers());
     }, []);
 
-    const users = useSelector<AddressBookState, ReadonlyArray<User>>(state => state.users);
+    const { users, hasMore } = useSelector<
+        AddressBookState,
+        Partial<AddressBookState>
+    >((state) => ({
+        users: state.users,
+        hasMore: state.hasMore,
+    }));
 
     const loadMore = useCallback(() => {
         dispatch(actions.moreUsers());
@@ -30,8 +35,9 @@ export const AddressBookPage: React.FunctionComponent = () => {
             <InfiniteScroll
                 dataLength={users.length}
                 next={loadMore}
-                hasMore={true}
+                hasMore={hasMore}
                 loader={<LoadingMessage />}
+                endMessage={<EndMessage />}
             >
                 <UserGrid />
             </InfiniteScroll>
@@ -47,6 +53,18 @@ const LoadingMessage: React.FunctionComponent = () => {
             </Col>
             <Col className="m-1 pl-1 flex-grow-0">
                 <div role="status">Loading…</div>
+            </Col>
+        </Row>
+    );
+};
+
+const EndMessage: React.FunctionComponent = () => {
+    return (
+        <Row className="justify-content-center mb-4">
+            <Col>
+                <div role="status" className="text-center text-info">
+                    End of users catalog
+                </div>
             </Col>
         </Row>
     );

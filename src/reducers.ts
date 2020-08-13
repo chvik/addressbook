@@ -22,5 +22,12 @@ export const addressBookReducer = (
         };
     }
 
+    if (isType(action, actions.noMoreUsers)) {
+        return {
+            ...state,
+            hasMore: false,
+        };
+    }
+
     return state;
 };

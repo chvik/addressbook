@@ -22,9 +22,11 @@ export async function fetchMore(
             dispatch(actions.usersFetchedFromPrefetch());
         }
 
-        if (state.users.length + BATCH_SIZE < MAX_LENGTH) {
-            const prefetchedUsers = await fetchUsers(nextPage + 1, BATCH_SIZE);
-            dispatch(actions.usersPrefetched({prefetchedUsers}));
+        const prefetchedUsers = await fetchUsers(nextPage + 1, BATCH_SIZE);
+        dispatch(actions.usersPrefetched({ prefetchedUsers }));
+
+        if (state.users.length >= MAX_LENGTH - BATCH_SIZE) {
+            dispatch(actions.noMoreUsers());
         }
     }
 }

@@ -36,13 +36,27 @@ describe("userfetcher", () => {
         const store = mockStore(initialState);
 
         await store.dispatch(actions.moreUsers());
-        
+
         const triggeredActions = store.getActions();
         expect(
-            triggeredActions.some(act => isType(act, actions.usersFetchedFromPrefetch))
+            triggeredActions.some((act) =>
+                isType(act, actions.usersFetchedFromPrefetch)
+            )
         ).toBeTruthy();
         expect(
-            triggeredActions.some(act => isType(act, actions.usersPrefetched))
+            triggeredActions.some((act) => isType(act, actions.usersPrefetched))
         ).toBeTruthy();
+    });
+
+    it("triggers hasNoMore action when fetched users reach 1000", async () => {
+        const store = mockStore({
+            ...initialState,
+            users: getSomeRandomTestUsers(950),
+        });
+
+        await store.dispatch(actions.moreUsers());
+        expect(
+            store.getActions().some((act) => isType(act, actions.noMoreUsers))
+        );
     });
 });
