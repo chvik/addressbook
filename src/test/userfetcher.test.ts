@@ -3,7 +3,7 @@ import { isType } from "typescript-fsa";
 import { mocked } from "ts-jest/utils";
 import { fetchUsers } from "../randomuserclient";
 import thunk, { ThunkDispatch } from "redux-thunk";
-import { AddressBookState } from "../store";
+import { AddressBookState, initialState } from "../model";
 import { AnyAction } from "redux";
 import { getSomeRandomTestUsers } from "./testutils";
 import * as actions from "../actions";
@@ -22,26 +22,27 @@ describe("userfetcher", () => {
         fetchUsersMock.mockClear();
     });
 
-    it("fetches another batch of users when it's needed", async () => {
-        const store = mockStore({
-            users: getSomeRandomTestUsers(50),
-        });
-
-        await store.dispatch(actions.moreUsers());
-
-        expect(fetchUsersMock.mock.calls).toEqual([[2, 50]]);
-        const triggeredActions = store.getActions();
-        expect(
-            triggeredActions.some((act) => isType(act, actions.usersFetched))
-        ).toBeTruthy();
-    });
-
     it("doesn't fetch more than 1000 users", async () => {
         const store = mockStore({
+            ...initialState,
             users: getSomeRandomTestUsers(1000),
         });
 
         await store.dispatch(actions.moreUsers());
         expect(fetchUsersMock.mock.calls).toEqual([]);
+    });
+
+    it("prefetches a batch of users", async () => {
+        const store = mockStore(initialState);
+
+        await store.dispatch(actions.moreUsers());
+        
+        const triggeredActions = store.getActions();
+        expect(
+            triggeredActions.some(act => isType(act, actions.usersFetchedFromPrefetch))
+        ).toBeTruthy();
+        expect(
+            triggeredActions.some(act => isType(act, actions.usersPrefetched))
+        ).toBeTruthy();
     });
 });

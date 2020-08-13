@@ -7,7 +7,7 @@ import "@testing-library/jest-dom";
 import thunk, { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { App } from "../components/App";
-import { AddressBookState } from "../store";
+import { AddressBookState, initialState } from "../model";
 import * as actions from "../actions";
 
 const middlewares = [thunk];
@@ -20,9 +20,7 @@ jest.mock("../randomuserclient");
 
 describe("App component", () => {
     it("fetches a batch of users on start", async () => {
-        const store = mockStore({
-            users: [],
-        });
+        const store = mockStore(initialState);
 
         render(
             <Provider store={store}>

@@ -1,5 +1,5 @@
 import { ThunkDispatch } from "redux-thunk";
-import { AddressBookState } from "./store";
+import { AddressBookState } from "./model";
 import { AnyAction } from "redux";
 import { fetchUsers } from "./randomuserclient";
 import * as actions from "./actions";
@@ -13,7 +13,18 @@ export async function fetchMore(
 ): Promise<void> {
     if (state.users.length < MAX_LENGTH) {
         const nextPage = Math.floor(state.users.length / BATCH_SIZE) + 1;
-        const users = await fetchUsers(nextPage, BATCH_SIZE);
-        dispatch(actions.usersFetched({ users }));
+
+        if (state.prefetchedUsers.length > 0) {
+            dispatch(actions.usersFetchedFromPrefetch());
+        } else {
+            const prefetchedUsers = await fetchUsers(nextPage, BATCH_SIZE);
+            dispatch(actions.usersPrefetched({ prefetchedUsers }));
+            dispatch(actions.usersFetchedFromPrefetch());
+        }
+
+        if (state.users.length + BATCH_SIZE < MAX_LENGTH) {
+            const prefetchedUsers = await fetchUsers(nextPage + 1, BATCH_SIZE);
+            dispatch(actions.usersPrefetched({prefetchedUsers}));
+        }
     }
 }

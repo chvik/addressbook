@@ -7,7 +7,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import * as actions from "../actions";
-import { AddressBookState } from "../store";
+import { AddressBookState } from "../model";
 import { User } from "../model";
 
 export const AddressBookPage: React.FunctionComponent = () => {

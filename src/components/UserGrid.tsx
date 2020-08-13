@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { AddressBookState } from "../store";
-import { User } from "../model";
+import { User, AddressBookState } from "../model";
 import { UserCard } from "./UserCard";
 
 const N_COLS = 6;

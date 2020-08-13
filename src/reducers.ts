@@ -1,16 +1,24 @@
 import { Action } from "redux";
 import { isType } from "typescript-fsa";
-import { AddressBookState, initialState } from "./store";
+import { AddressBookState, initialState } from "./model";
 import * as actions from "./actions";
 
 export const addressBookReducer = (
     state: AddressBookState = initialState,
     action: Action
 ): AddressBookState => {
-    if (isType(action, actions.usersFetched)) {
+    if (isType(action, actions.usersPrefetched)) {
         return {
             ...state,
-            users: [...state.users, ...action.payload.users],
+            prefetchedUsers: action.payload.prefetchedUsers,
+        };
+    }
+
+    if (isType(action, actions.usersFetchedFromPrefetch)) {
+        return {
+            ...state,
+            users: [...state.users, ...state.prefetchedUsers],
+            prefetchedUsers: [],
         };
     }
 
