@@ -48,5 +48,12 @@ export const addressBookReducer = (
         };
     }
 
+    if (isType(action, actions.filterBy)) {
+        return {
+            ...state,
+            filterBy: action.payload.filterString.trim(),
+        };
+    }
+
     return state;
 };

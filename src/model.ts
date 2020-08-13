@@ -32,6 +32,7 @@ export interface AddressBookState {
     prefetchedUsers: ReadonlyArray<User>;
     hasMore: boolean;
     modalState: ModalState;
+    filterBy: string;
 }
 
 export const initialState: AddressBookState = {
@@ -41,4 +42,5 @@ export const initialState: AddressBookState = {
     modalState: {
         kind: "no-modal",
     },
+    filterBy: "",
 };

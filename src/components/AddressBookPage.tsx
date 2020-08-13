@@ -6,6 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Spinner from "react-bootstrap/Spinner";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
 import * as actions from "../actions";
 import { AddressBookState, ModalState, User } from "../model";
 import { DetailsModal } from "./DetailsModal";
@@ -25,6 +26,9 @@ export const AddressBookPage: React.FunctionComponent = () => {
     const modalState = useSelector<AddressBookState, ModalState>(
         (state) => state.modalState
     );
+    const filterBy = useSelector<AddressBookState, string>(
+        (state) => state.filterBy
+    );
 
     const loadMore = useCallback(() => {
         dispatch(actions.moreUsers());
@@ -34,19 +38,42 @@ export const AddressBookPage: React.FunctionComponent = () => {
         dispatch(actions.detailsToClose());
     }, []);
 
+    const onSearchChange = useCallback((event) => {
+        dispatch(
+            actions.filterBy({
+                filterString: event.target.value,
+            })
+        );
+    }, []);
+
+    const filterOn = filterBy.length > 0;
+    const filteredUsers = filterOn ? filterUsers(users, filterBy) : users;
+
     return (
         <div>
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="light" expand="lg" className="sticky-top">
                 <Navbar.Brand>Address Book</Navbar.Brand>
+                <Form inline className="m-2">
+                    <Form.Group controlId="search">
+                        <Form.Control
+                            type="search"
+                            placeholder="Search"
+                            className="m-2"
+                            onChange={onSearchChange}
+                        />
+                    </Form.Group>
+                </Form>
             </Navbar>
             <InfiniteScroll
-                dataLength={users.length}
+                dataLength={filteredUsers.length}
                 next={loadMore}
-                hasMore={hasMore}
+                hasMore={hasMore && !filterOn}
                 loader={<LoadingMessage />}
-                endMessage={<EndMessage />}
+                endMessage={
+                    hasMore && filterOn ? <FilteredMessage /> : <EndMessage />
+                }
             >
-                <UserGrid />
+                <UserGrid users={filteredUsers} />
             </InfiniteScroll>
             {modalState.kind === "details-modal" ? (
                 <DetailsModal user={modalState.user} onClose={onCloseDetails} />
@@ -79,3 +106,26 @@ const EndMessage: React.FunctionComponent = () => {
         </Row>
     );
 };
+
+const FilteredMessage: React.FunctionComponent = () => {
+    return (
+        <Row className="justify-content-center mb-4">
+            <Col>
+                <div role="status" className="text-center text-warning">
+                    Loading more users is not available while filtering is on
+                </div>
+            </Col>
+        </Row>
+    );
+};
+
+function filterUsers(
+    users: ReadonlyArray<User>,
+    filterBy: string
+): ReadonlyArray<User> {
+    return users.filter((u) =>
+        `${u.firstName} ${u.lastName}`
+            .toLocaleLowerCase()
+            .includes(filterBy.toLocaleLowerCase())
+    );
+}

@@ -1,18 +1,17 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { User, AddressBookState } from "../model";
+import { User } from "../model";
 import * as actions from "../actions";
 import { UserCard } from "./UserCard";
 
 const N_COLS = 6;
 
-export const UserGrid: React.FunctionComponent = () => {
-    const users = useSelector<AddressBookState, ReadonlyArray<User>>(
-        (state) => state.users
-    );
+export const UserGrid: React.FunctionComponent<{
+    users: ReadonlyArray<User>;
+}> = ({ users }) => {
     const slicedUsers = sliceArray(users, N_COLS);
     const dispatch = useDispatch();
 

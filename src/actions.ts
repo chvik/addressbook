@@ -27,3 +27,7 @@ export const noMoreUsers = actionCreator("NoMoreUsers");
 export const userActivated = actionCreator<User>("UserActivated");
 
 export const detailsToClose = actionCreator("DetailsToClose");
+
+export const filterBy = actionCreator<{
+    filterString: string;
+}>("FilterBy");
