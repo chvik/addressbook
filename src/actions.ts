@@ -23,3 +23,7 @@ export const usersPrefetched = actionCreator<{
 }>("UsersPrefetched");
 
 export const noMoreUsers = actionCreator("NoMoreUsers");
+
+export const userActivated = actionCreator<User>("UserActivated");
+
+export const detailsToClose = actionCreator("DetailsToClose");

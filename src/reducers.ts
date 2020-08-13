@@ -29,5 +29,24 @@ export const addressBookReducer = (
         };
     }
 
+    if (isType(action, actions.userActivated)) {
+        return {
+            ...state,
+            modalState: {
+                kind: "details-modal",
+                user: action.payload,
+            },
+        };
+    }
+
+    if (isType(action, actions.detailsToClose)) {
+        return {
+            ...state,
+            modalState: {
+                kind: "no-modal",
+            },
+        };
+    }
+
     return state;
 };

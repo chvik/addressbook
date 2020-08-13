@@ -1,9 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { User, AddressBookState } from "../model";
+import * as actions from "../actions";
 import { UserCard } from "./UserCard";
 
 const N_COLS = 6;
@@ -13,15 +14,25 @@ export const UserGrid: React.FunctionComponent = () => {
         (state) => state.users
     );
     const slicedUsers = sliceArray(users, N_COLS);
+    const dispatch = useDispatch();
+
     return (
         <Container>
             {slicedUsers.map((row, i) => (
                 <Row key={i} xl={3} md={2} xs={1}>
-                    {row.map((user) => (
-                        <Col key={user.username} className="mb-4">
-                            <UserCard user={user} />
-                        </Col>
-                    ))}
+                    {row.map((user) => {
+                        const onActivated = () => {
+                            dispatch(actions.userActivated(user));
+                        };
+                        return (
+                            <Col key={user.username} className="mb-4">
+                                <UserCard
+                                    user={user}
+                                    onActivated={onActivated}
+                                />
+                            </Col>
+                        );
+                    })}
                 </Row>
             ))}
         </Container>

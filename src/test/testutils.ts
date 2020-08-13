@@ -7,21 +7,35 @@ import {
 import { User } from "../model";
 
 const uniqueNamesGeneratorConfig: Config = {
-    dictionaries: [names, adjectives],
-    length: 2,
+    dictionaries: [names, adjectives, adjectives],
+    length: 3,
     separator: " ",
     style: "capital",
 };
 
+function getRandomInt(max: number): number {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 export function getRandomTestUser(): User {
-    const name = uniqueNamesGenerator(uniqueNamesGeneratorConfig);
-    const [first, last] = name.split(" ");
+    const data = uniqueNamesGenerator(uniqueNamesGeneratorConfig);
+    const [first, last, street] = data.split(" ");
     return {
-        first: first,
-        last: last,
+        firstName: first,
+        lastName: last,
         username: first.toLowerCase(),
         email: `${first.toLowerCase()}@${last.toLowerCase()}.com`,
-        thumbnail: "https://picsum.photos/200",
+        thumbnailPicture: "https://picsum.photos/200",
+        largePicture: "https://picsum.photos/200",
+        phone: "(1) 234 567890",
+        cell: "(999) 1234 5678",
+        location: {
+            streetNumber: `${getRandomInt(100)}`,
+            streetName: street,
+            city: "Boston",
+            postcode: `${10000 + getRandomInt(1000)}`,
+            state: "Massachusetts",
+        },
     };
 }
 

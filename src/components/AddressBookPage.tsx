@@ -7,7 +7,8 @@ import Spinner from "react-bootstrap/Spinner";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import * as actions from "../actions";
-import { AddressBookState } from "../model";
+import { AddressBookState, ModalState, User } from "../model";
+import { DetailsModal } from "./DetailsModal";
 
 export const AddressBookPage: React.FunctionComponent = () => {
     const dispatch = useDispatch();
@@ -15,16 +16,22 @@ export const AddressBookPage: React.FunctionComponent = () => {
         dispatch(actions.moreUsers());
     }, []);
 
-    const { users, hasMore } = useSelector<
-        AddressBookState,
-        Partial<AddressBookState>
-    >((state) => ({
-        users: state.users,
-        hasMore: state.hasMore,
-    }));
+    const users = useSelector<AddressBookState, ReadonlyArray<User>>(
+        (state) => state.users
+    );
+    const hasMore = useSelector<AddressBookState, boolean>(
+        (state) => state.hasMore
+    );
+    const modalState = useSelector<AddressBookState, ModalState>(
+        (state) => state.modalState
+    );
 
     const loadMore = useCallback(() => {
         dispatch(actions.moreUsers());
+    }, []);
+
+    const onCloseDetails = useCallback(() => {
+        dispatch(actions.detailsToClose());
     }, []);
 
     return (
@@ -41,6 +48,9 @@ export const AddressBookPage: React.FunctionComponent = () => {
             >
                 <UserGrid />
             </InfiniteScroll>
+            {modalState.kind === "details-modal" ? (
+                <DetailsModal user={modalState.user} onClose={onCloseDetails} />
+            ) : null}
         </div>
     );
 };

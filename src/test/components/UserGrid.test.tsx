@@ -3,8 +3,8 @@ import { Provider } from "react-redux";
 import configureMockStore from "redux-mock-store";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { UserGrid } from "../components/UserGrid";
-import { getSomeRandomTestUsers } from "./testutils";
+import { UserGrid } from "../../components/UserGrid";
+import { getSomeRandomTestUsers } from "../testutils";
 
 const mockStore = configureMockStore([]);
 

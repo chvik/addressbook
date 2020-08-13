@@ -5,17 +5,29 @@ import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
 
-export const UserCard: React.FunctionComponent<{ user: User }> = ({ user }) => {
+interface UserCardProps {
+    user: User;
+    onActivated: (user: User) => void;
+}
+
+export const UserCard: React.FunctionComponent<UserCardProps> = ({
+    user,
+    onActivated,
+}) => {
     return (
-        <Container className="border" role="cell">
+        <Container
+            className="border user-cell btn"
+            role="cell"
+            onClick={() => onActivated(user)}
+        >
             <Row>
                 <Col className="align-self-center flex-grow-0">
-                    <Image src={user.thumbnail} rounded />
+                    <Image src={user.thumbnailPicture} rounded />
                 </Col>
                 <Col xs={6} sm={8} className="m-2">
                     <Row>
                         <strong>
-                            {user.first} {user.last}
+                            {user.firstName} {user.lastName}
                         </strong>
                     </Row>
                     <Row className="text-muted">{user.username}</Row>
