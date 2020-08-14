@@ -3,15 +3,15 @@ import { isType } from "typescript-fsa";
 import { mocked } from "ts-jest/utils";
 import { fetchUsers } from "../randomuserclient";
 import thunk, { ThunkDispatch } from "redux-thunk";
-import { AddressBookState, initialState } from "../model";
+import { initialAddressBookState, RootState } from "../model";
 import { AnyAction } from "redux";
 import { getSomeRandomTestUsers } from "./testutils";
 import * as actions from "../actions";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore<
-    AddressBookState,
-    ThunkDispatch<AddressBookState, void, AnyAction>
+    RootState,
+    ThunkDispatch<RootState, void, AnyAction>
 >(middlewares);
 
 jest.mock("../randomuserclient");
@@ -24,8 +24,11 @@ describe("userfetcher", () => {
 
     it("doesn't fetch more than 1000 users", async () => {
         const store = mockStore({
-            ...initialState,
-            users: getSomeRandomTestUsers(1000),
+            addressBook: {
+                ...initialAddressBookState,
+                users: getSomeRandomTestUsers(1000),
+            },
+            router: null,
         });
 
         await store.dispatch(actions.moreUsers());
@@ -33,7 +36,10 @@ describe("userfetcher", () => {
     });
 
     it("prefetches a batch of users", async () => {
-        const store = mockStore(initialState);
+        const store = mockStore({
+            addressBook: initialAddressBookState,
+            router: null,
+        });
 
         await store.dispatch(actions.moreUsers());
 
@@ -50,8 +56,11 @@ describe("userfetcher", () => {
 
     it("triggers hasNoMore action when fetched users reach 1000", async () => {
         const store = mockStore({
-            ...initialState,
-            users: getSomeRandomTestUsers(950),
+            addressBook: {
+                ...initialAddressBookState,
+                users: getSomeRandomTestUsers(950),
+            },
+            router: null,
         });
 
         await store.dispatch(actions.moreUsers());

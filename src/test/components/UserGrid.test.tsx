@@ -5,14 +5,14 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { UserGrid } from "../../components/UserGrid";
 import { getSomeRandomTestUsers } from "../testutils";
-import { initialState } from "../../model";
+import { initialAddressBookState } from "../../model";
 
 const mockStore = configureMockStore([]);
 
 describe("UserGrid component", () => {
     it("renders user cards in a grid", () => {
         const users = getSomeRandomTestUsers(10);
-        const store = mockStore(initialState);
+        const store = mockStore(initialAddressBookState);
 
         render(
             <Provider store={store}>

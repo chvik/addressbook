@@ -1,3 +1,5 @@
+import { RouterState } from "connected-react-router";
+
 export interface Location {
     streetNumber: string;
     streetName: string;
@@ -27,15 +29,25 @@ export type ModalState =
           user: User;
       };
 
+export interface Settings {
+    nationality: string;
+}
+
 export interface AddressBookState {
     users: ReadonlyArray<User>;
     prefetchedUsers: ReadonlyArray<User>;
     hasMore: boolean;
     modalState: ModalState;
     filterBy: string;
+    settings: Settings;
 }
 
-export const initialState: AddressBookState = {
+export interface RootState {
+    addressBook: AddressBookState;
+    router: RouterState;
+}
+
+export const initialAddressBookState: AddressBookState = {
     users: [],
     prefetchedUsers: [],
     hasMore: true,
@@ -43,4 +55,14 @@ export const initialState: AddressBookState = {
         kind: "no-modal",
     },
     filterBy: "",
+    settings: {
+        nationality: "GB",
+    },
 };
+
+export const nationalityOptions = [
+    ["CH", "Swiss"],
+    ["ES", "Spanish"],
+    ["FR", "French"],
+    ["GB", "British"],
+];

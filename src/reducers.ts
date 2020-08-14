@@ -1,10 +1,12 @@
-import { Action } from "redux";
+import { Action, combineReducers } from "redux";
 import { isType } from "typescript-fsa";
-import { AddressBookState, initialState } from "./model";
+import { connectRouter } from "connected-react-router";
+import { History } from "history";
+import { AddressBookState, initialAddressBookState } from "./model";
 import * as actions from "./actions";
 
 export const addressBookReducer = (
-    state: AddressBookState = initialState,
+    state: AddressBookState = initialAddressBookState,
     action: Action
 ): AddressBookState => {
     if (isType(action, actions.usersPrefetched)) {
@@ -55,5 +57,29 @@ export const addressBookReducer = (
         };
     }
 
+    if (isType(action, actions.nationalitySettingChanged)) {
+        if (action.payload.nationality !== state.settings.nationality) {
+            return {
+                ...state,
+                users: [],
+                prefetchedUsers: [],
+                settings: {
+                    ...state.settings,
+                    nationality: action.payload.nationality,
+                },
+            };
+        } else {
+            return state;
+        }
+    }
+
     return state;
 };
+
+export const createRootReducer = (
+    history: History
+): ReturnType<typeof combineReducers> =>
+    combineReducers({
+        router: connectRouter(history),
+        addressBook: addressBookReducer,
+    });

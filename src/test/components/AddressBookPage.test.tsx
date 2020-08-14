@@ -7,25 +7,31 @@ import "@testing-library/jest-dom";
 import thunk, { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { AddressBookPage } from "../../components/AddressBookPage";
-import { AddressBookState, initialState } from "../../model";
+import { initialAddressBookState, RootState } from "../../model";
 import * as actions from "../../actions";
 import { getRandomTestUser } from "../testutils";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore<
-    AddressBookState,
-    ThunkDispatch<AddressBookState, void, AnyAction>
+    RootState,
+    ThunkDispatch<RootState, void, AnyAction>
 >(middlewares);
 
 jest.mock("../../randomuserclient");
 
 describe("AddressBookPage component", () => {
     it("fetches a batch of users on start", async () => {
-        const store = mockStore(initialState);
+        const store = mockStore({
+            addressBook: initialAddressBookState,
+            router: null,
+        });
 
         render(
             <Provider store={store}>
-                <AddressBookPage />
+                <Router>
+                    <AddressBookPage />
+                </Router>
             </Provider>
         );
 
@@ -39,11 +45,16 @@ describe("AddressBookPage component", () => {
     });
 
     it("when loading more users a loading spinner is displayed", async () => {
-        const store = mockStore(initialState);
+        const store = mockStore({
+            addressBook: initialAddressBookState,
+            router: null,
+        });
 
         render(
             <Provider store={store}>
-                <AddressBookPage />
+                <Router>
+                    <AddressBookPage />
+                </Router>
             </Provider>
         );
 
@@ -54,16 +65,21 @@ describe("AddressBookPage component", () => {
 
     it("activating a user card opens a modal", () => {
         const store = mockStore({
-            ...initialState,
-            modalState: {
-                kind: "details-modal",
-                user: getRandomTestUser(),
+            addressBook: {
+                ...initialAddressBookState,
+                modalState: {
+                    kind: "details-modal",
+                    user: getRandomTestUser(),
+                },
             },
+            router: null,
         });
 
         render(
             <Provider store={store}>
-                <AddressBookPage />
+                <Router>
+                    <AddressBookPage />
+                </Router>
             </Provider>
         );
 

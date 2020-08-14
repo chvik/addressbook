@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Link } from "react-router-dom";
 import { UserGrid } from "./UserGrid";
 import Navbar from "react-bootstrap/Navbar";
 import Spinner from "react-bootstrap/Spinner";
@@ -8,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import * as actions from "../actions";
-import { AddressBookState, ModalState, User } from "../model";
+import { User, RootState } from "../model";
 import { DetailsModal } from "./DetailsModal";
 
 export const AddressBookPage: React.FunctionComponent = () => {
@@ -17,17 +18,15 @@ export const AddressBookPage: React.FunctionComponent = () => {
         dispatch(actions.moreUsers());
     }, []);
 
-    const users = useSelector<AddressBookState, ReadonlyArray<User>>(
-        (state) => state.users
+    const users = useSelector((state: RootState) => state.addressBook.users);
+    const hasMore = useSelector(
+        (state: RootState) => state.addressBook.hasMore
     );
-    const hasMore = useSelector<AddressBookState, boolean>(
-        (state) => state.hasMore
+    const modalState = useSelector(
+        (state: RootState) => state.addressBook.modalState
     );
-    const modalState = useSelector<AddressBookState, ModalState>(
-        (state) => state.modalState
-    );
-    const filterBy = useSelector<AddressBookState, string>(
-        (state) => state.filterBy
+    const filterBy = useSelector(
+        (state: RootState) => state.addressBook.filterBy
     );
 
     const loadMore = useCallback(() => {
@@ -51,8 +50,16 @@ export const AddressBookPage: React.FunctionComponent = () => {
 
     return (
         <div>
-            <Navbar bg="light" expand="lg" className="sticky-top">
-                <Navbar.Brand>Address Book</Navbar.Brand>
+            <Navbar
+                bg="light"
+                expand="lg"
+                className="sticky-top justify-content-between"
+            >
+                <Col>
+                    <Navbar.Brand className="my-4">Address Book</Navbar.Brand>
+                    <span className="mr-4">Home</span>
+                    <Link to="/settings">Settings</Link>
+                </Col>
                 <Form inline className="m-2">
                     <Form.Group controlId="search">
                         <Form.Control

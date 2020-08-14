@@ -3,10 +3,11 @@ import { User } from "./model";
 const SEED = "veryfineseed";
 
 export async function fetchUsers(
+    nationality: string,
     page: number,
     results: number
 ): Promise<ReadonlyArray<User>> {
-    const url = `https://randomuser.me/api/?page=${page}&results=${results}&seed=${SEED}`;
+    const url = `https://randomuser.me/api/?nat=${nationality.toLowerCase()}&page=${page}&results=${results}&seed=${SEED}`;
     const response = await fetch(url);
     if (response.ok) {
         const json = await response.json();

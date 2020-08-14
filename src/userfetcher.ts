@@ -1,5 +1,5 @@
 import { ThunkDispatch } from "redux-thunk";
-import { AddressBookState } from "./model";
+import { AddressBookState, RootState } from "./model";
 import { AnyAction } from "redux";
 import { fetchUsers } from "./randomuserclient";
 import * as actions from "./actions";
@@ -9,23 +9,34 @@ const MAX_LENGTH = 1000;
 
 export async function fetchMore(
     dispatch: ThunkDispatch<AddressBookState, void, AnyAction>,
-    state: AddressBookState
+    state: RootState
 ): Promise<void> {
-    if (state.users.length < MAX_LENGTH) {
-        const nextPage = Math.floor(state.users.length / BATCH_SIZE) + 1;
+    const nationality = state.addressBook.settings.nationality;
 
-        if (state.prefetchedUsers.length > 0) {
+    if (state.addressBook.users.length < MAX_LENGTH) {
+        const nextPage =
+            Math.floor(state.addressBook.users.length / BATCH_SIZE) + 1;
+
+        if (state.addressBook.prefetchedUsers.length > 0) {
             dispatch(actions.usersFetchedFromPrefetch());
         } else {
-            const prefetchedUsers = await fetchUsers(nextPage, BATCH_SIZE);
+            const prefetchedUsers = await fetchUsers(
+                nationality,
+                nextPage,
+                BATCH_SIZE
+            );
             dispatch(actions.usersPrefetched({ prefetchedUsers }));
             dispatch(actions.usersFetchedFromPrefetch());
         }
 
-        const prefetchedUsers = await fetchUsers(nextPage + 1, BATCH_SIZE);
+        const prefetchedUsers = await fetchUsers(
+            nationality,
+            nextPage + 1,
+            BATCH_SIZE
+        );
         dispatch(actions.usersPrefetched({ prefetchedUsers }));
 
-        if (state.users.length >= MAX_LENGTH - BATCH_SIZE) {
+        if (state.addressBook.users.length >= MAX_LENGTH - BATCH_SIZE) {
             dispatch(actions.noMoreUsers());
         }
     }

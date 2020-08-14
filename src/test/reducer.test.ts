@@ -1,12 +1,12 @@
 import { addressBookReducer } from "../reducers";
 import * as actions from "../actions";
 import { getSomeRandomTestUsers } from "./testutils";
-import { AddressBookState, initialState } from "../model";
+import { AddressBookState, initialAddressBookState } from "../model";
 
 describe("Reducer", () => {
     it("stores the prefetched users", () => {
         const nextState = addressBookReducer(
-            initialState,
+            initialAddressBookState,
             actions.usersPrefetched({
                 prefetchedUsers: getSomeRandomTestUsers(50),
             })
@@ -16,7 +16,7 @@ describe("Reducer", () => {
 
     it("uses prefetched users when available", () => {
         const prevState: AddressBookState = {
-            ...initialState,
+            ...initialAddressBookState,
             prefetchedUsers: getSomeRandomTestUsers(50),
         };
         const { users, prefetchedUsers } = addressBookReducer(
@@ -29,7 +29,7 @@ describe("Reducer", () => {
 
     it("sets hasMore to false when user list reaches the end", () => {
         const { hasMore } = addressBookReducer(
-            initialState,
+            initialAddressBookState,
             actions.noMoreUsers()
         );
         expect(hasMore).toBeFalsy();
