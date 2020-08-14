@@ -24,7 +24,7 @@ You can run the checks by
 ![screenshot](https://user-images.githubusercontent.com/3630851/90241111-b4b56180-de2a-11ea-9c96-51a3b449be70.png)
 
 ### The Settings Page
-![screenshot](https://user-images.githubusercontent.com/3630851/90241116-b848e880-de2a-11ea-983a-d0ba5ffe5eaf.png)
+![screenshot](https://user-images.githubusercontent.com/3630851/90241446-59d03a00-de2b-11ea-9197-2e7ce91f22bb.png)
 
 
 ## What did I use?
