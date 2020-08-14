@@ -67,6 +67,7 @@ export const AddressBookPage: React.FunctionComponent = () => {
                             placeholder="Search"
                             className="m-2"
                             onChange={onSearchChange}
+                            value={filterBy}
                         />
                     </Form.Group>
                 </Form>
@@ -133,6 +134,6 @@ function filterUsers(
     return users.filter((u) =>
         `${u.firstName} ${u.lastName}`
             .toLocaleLowerCase()
-            .includes(filterBy.toLocaleLowerCase())
+            .includes(filterBy.trim().toLocaleLowerCase())
     );
 }
