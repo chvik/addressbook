@@ -39,6 +39,7 @@ export const SettingsPage: React.FunctionComponent = () => {
                         as="select"
                         value={nationality}
                         onChange={onNationalityChange}
+                        role="listbox"
                     >
                         {nationalityOptions.map(([value, label]) => (
                             <option value={value} key={value}>
